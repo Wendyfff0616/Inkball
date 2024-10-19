@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Spawner.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">inkball_scaffold</a> &gt; <a href="index.source.html" class="el_package">inkball</a> &gt; <span class="el_source">Spawner.java</span></div><h1>Spawner.java</h1><pre class="source lang-java linenums">package inkball;
+
+import processing.core.PImage;
+
+/**
+ * The Spawner class represents a spawning point in the Inkball game where balls are generated.
+ * Each spawner has a position, size, and associated image, and it can be drawn on the game screen.
+ */
+public class Spawner extends Entity implements Drawable {
+    PImage spawnerImage;  // The image representing the spawner
+    int width;
+    int height;    // Width and height of the spawner (in pixels)
+
+    /**
+     * Constructor for creating a Spawner object.
+     *
+     * @param x     The x-coordinate of the spawner's position.
+     * @param y     The y-coordinate of the spawner's position.
+     * @param color The color associated with the spawner (currently unused for image purposes).
+     * @param p     The main game application instance used for loading the image.
+     */
+    public Spawner(int x, int y, int color, App p) {
+<span class="fc" id="L23">        super(x, y, color);</span>
+<span class="fc" id="L24">        this.width = 32;  // Default width of the spawner</span>
+<span class="fc" id="L25">        this.height = 32; // Default height of the spawner</span>
+
+<span class="fc" id="L27">        loadImage(p);  // Load the image for the spawner</span>
+<span class="fc" id="L28">    }</span>
+
+    /**
+     * Loads the image for the spawner.
+     *
+     * @param p The main game application instance used to load the image.
+     */
+    @Override
+    public void loadImage(App p) {
+<span class="fc" id="L37">        spawnerImage = p.loadImage(&quot;inkball/entrypoint.png&quot;);  // Load the spawner's image</span>
+<span class="fc" id="L38">    }</span>
+
+    /**
+     * Draws the spawner at its current position on the game screen.
+     *
+     * @param p The main game application instance used for rendering.
+     */
+    @Override
+    public void draw(App p) {
+<span class="fc" id="L47">        p.image(spawnerImage, x, y);  // Draw the spawner image at the (x, y) position</span>
+<span class="fc" id="L48">    }</span>
+
+    // Getters for spawner's x and y position
+
+    /**
+     * Returns the x-coordinate of the spawner.
+     *
+     * @return The x-coordinate of the spawner.
+     */
+    public int getX() {
+<span class="fc" id="L58">        return x;</span>
+    }
+
+    /**
+     * Returns the y-coordinate of the spawner.
+     *
+     * @return The y-coordinate of the spawner.
+     */
+    public int getY() {
+<span class="fc" id="L67">        return y;</span>
+    }
+
+<span class="fc" id="L70">    public void setX(int x) { this.x = x; }</span>
+
+<span class="fc" id="L72">    public void setY(int y) { this.y = y; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

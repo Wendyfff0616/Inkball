@@ -1,0 +1,44 @@
+{
+  "levels": [
+    {
+      "layout": "level1.txt",
+      "time": 120,
+      "spawn_interval": 10,
+      "score_increase_from_hole_capture_modifier": 1.0,
+      "score_decrease_from_wrong_hole_modifier": 1.0,
+      "_comment": ["blue", "orange", "grey", "blue", "green", "yellow"],
+      "balls": ["blue", "orange", "grey", "blue", "green", "yellow"]
+    },
+    {
+      "layout": "level2.txt",
+      "time": 180,
+      "spawn_interval": 6,
+      "score_increase_from_hole_capture_modifier": 1.2,
+      "score_decrease_from_wrong_hole_modifier": 1.1,
+      "balls": ["green", "grey", "grey", "blue", "yellow", "orange", "blue", "grey"]
+    },
+    {
+      "layout": "level3.txt",
+      "time": 180,
+      "spawn_interval": 5,
+      "score_increase_from_hole_capture_modifier": 1.3,
+      "score_decrease_from_wrong_hole_modifier": 1.3,
+      "balls": ["grey", "grey", "grey", "grey", "grey", "grey", "grey", "grey"]
+    }
+  ],
+  "score_increase_from_hole_capture": {
+    "grey": 70,
+    "orange": 50,
+    "blue": 50,
+    "green": 50,
+    "yellow": 100
+  },
+  "score_decrease_from_wrong_hole": {
+    "grey": 0,
+    "orange": 25,
+    "blue": 25,
+    "green": 25,
+    "yellow": 100
+  }
+}
+
