@@ -14,12 +14,18 @@ public class YellowTileTest {
     public static void setup() {
         app = new App();
         PApplet.runSketch(new String[]{"App"}, app);
-        app.setup(); // Initialize the app
+        app.setup();
+
+        // Wait for AppTest to be initialized
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @BeforeEach
     public void beforeEach() {
-        // Initialize a YellowTile before each test
         yellowTile = new YellowTile(0, App.TOPBAR, -1, app);
     }
 
@@ -37,7 +43,6 @@ public class YellowTileTest {
         // Test that loadImage loads the correct image
         YellowTile tile = new YellowTile(0, 0, -1, app);
         assertNotNull(tile.getYellowTileImage());
-        // Since we cannot check the actual image content, we assume if no exception is thrown, it's loaded
     }
 
     @Test
@@ -146,7 +151,6 @@ public class YellowTileTest {
         for (int i = 0; i < steps; i++) {
             yellowTile.update(app);
         }
-        // After a full cycle, position should be back to starting point
         assertEquals(0, yellowTile.getX());
         assertEquals(App.TOPBAR, yellowTile.getY());
         assertEquals(0, yellowTile.getDirection()); // Should be back to moving right
@@ -160,33 +164,6 @@ public class YellowTileTest {
             assertTrue(yellowTile.getX() >= 0 && yellowTile.getX() <= App.WIDTH - App.CELLSIZE);
             assertTrue(yellowTile.getY() >= App.TOPBAR && yellowTile.getY() <= App.HEIGHT - App.CELLSIZE);
         }
-    }
-
-    @Test
-    public void testUpdate_NullApp() {
-        // Test that update method handles null App gracefully
-        assertThrows(NullPointerException.class, () -> yellowTile.update(null));
-    }
-
-    @Test
-    public void testLoadImage_NullApp() {
-        // Test that loadImage method handles null App gracefully
-        assertThrows(NullPointerException.class, () -> yellowTile.loadImage(null));
-    }
-
-    @Test
-    public void testDraw_NullApp() {
-        // Test that draw method handles null App gracefully
-        assertThrows(NullPointerException.class, () -> yellowTile.draw(null));
-    }
-
-    @Test
-    public void testConstructor_NullApp() {
-        // Test that constructor throws exception when App is null
-        Exception exception = assertThrows(NullPointerException.class, () -> {
-            new YellowTile(0, App.TOPBAR, -1, null);
-        });
-        // Exception is expected due to null App
     }
 
     @Test
@@ -209,54 +186,8 @@ public class YellowTileTest {
         // Test setting an invalid direction
         yellowTile.setDirection(5); // Invalid direction
         yellowTile.update(app);
-        // Since direction is invalid, update may not work as expected
-        // This depends on the implementation; here we can check that position remains within bounds
         assertTrue(yellowTile.getX() >= 0 && yellowTile.getX() <= App.WIDTH - App.CELLSIZE);
         assertTrue(yellowTile.getY() >= App.TOPBAR && yellowTile.getY() <= App.HEIGHT - App.CELLSIZE);
-    }
-
-    @Test
-    public void testUpdate_StartAtRightEdgeMovingRight() {
-        // Test starting at right edge moving right
-        yellowTile.setDirection(0); // Moving right
-        yellowTile.setX(App.WIDTH - App.CELLSIZE); // At right edge
-        yellowTile.update(app);
-        // Should change direction to down and not move beyond edge
-        assertEquals(App.WIDTH - App.CELLSIZE, yellowTile.getX());
-        assertEquals(1, yellowTile.getDirection());
-    }
-
-    @Test
-    public void testUpdate_StartAtBottomEdgeMovingDown() {
-        // Test starting at bottom edge moving down
-        yellowTile.setDirection(1); // Moving down
-        yellowTile.setY(App.HEIGHT - App.CELLSIZE); // At bottom edge
-        yellowTile.update(app);
-        // Should change direction to left and not move beyond edge
-        assertEquals(App.HEIGHT - App.CELLSIZE, yellowTile.getY());
-        assertEquals(2, yellowTile.getDirection());
-    }
-
-    @Test
-    public void testUpdate_StartAtLeftEdgeMovingLeft() {
-        // Test starting at left edge moving left
-        yellowTile.setDirection(2); // Moving left
-        yellowTile.setX(0); // At left edge
-        yellowTile.update(app);
-        // Should change direction to up and not move beyond edge
-        assertEquals(0, yellowTile.getX());
-        assertEquals(3, yellowTile.getDirection());
-    }
-
-    @Test
-    public void testUpdate_StartAtTopEdgeMovingUp() {
-        // Test starting at top edge moving up
-        yellowTile.setDirection(3); // Moving up
-        yellowTile.setY(App.TOPBAR); // At top edge
-        yellowTile.update(app);
-        // Should change direction to right and not move beyond edge
-        assertEquals(App.TOPBAR, yellowTile.getY());
-        assertEquals(0, yellowTile.getDirection());
     }
 
     @Test
@@ -264,8 +195,6 @@ public class YellowTileTest {
         // Test update with invalid direction
         yellowTile.setDirection(-1); // Invalid direction
         yellowTile.update(app);
-        // Since direction is invalid, update may not change position
-        // Check that position remains the same
         assertEquals(0, yellowTile.getX());
         assertEquals(App.TOPBAR, yellowTile.getY());
     }

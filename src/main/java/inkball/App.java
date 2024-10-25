@@ -7,18 +7,20 @@ import processing.data.JSONObject;
 
 import java.util.*;
 
+/**
+ * Represents the main application for the Inkball game.
+ * Manages game states, levels, player interactions, rendering, and overall game logic.
+ */
 public class App extends PApplet {
 
     public static final int CELLSIZE = 32;
     public static final int CELLHEIGHT = 32;
-
     public static final int CELLAVG = 32;
     public static final int TOPBAR = 64;
     public static int WIDTH = 576;
     public static int HEIGHT = 640;
     public static final int BOARD_WIDTH = WIDTH / CELLSIZE;
     public static final int BOARD_HEIGHT = 20;
-
     public static final int FPS = 30;
 
     ConfigReader configReader;
@@ -29,14 +31,11 @@ public class App extends PApplet {
     Level currentLevel;
     int score = 0; // Total score
 
-    public List<Ball> unspawnedBalls; // List of unspawned balls
-
+    public List<Ball> unspawnedBalls;
     int spawnCounter;
-
     List<PlayerDrawnLine> playerLines = new ArrayList<>();
 
     public String configPath;
-
     public static Random random = new Random();
 
     // Timer-related variables
@@ -44,7 +43,6 @@ public class App extends PApplet {
     int remainingTime;   // Remaining time in seconds
     long startTime;      // Start time in milliseconds
     boolean timerFinished; // Indicates whether the timer has finished
-
     boolean levelEnded = false;
 
     /**
@@ -80,7 +78,6 @@ public class App extends PApplet {
      */
     public void loadLevel(int index) {
         JSONObject levelConfig = configReader.getLevelConfig(index);
-        JSONObject config = configReader.getConfig(); // Get the entire config object
         if (levelConfig != null) {
             String layoutFile = levelConfig.getString("layout");
             int levelTime = levelConfig.getInt("time");
@@ -101,25 +98,20 @@ public class App extends PApplet {
                 unspawnedBalls.add(ball);
             }
 
-            // Create a new Level instance, passing the levelConfig, config, and App instance
             currentLevel = new Level(index, configReader, this);
-
             // Load the level layout
             currentLevel.loadLevel(layoutFile, this);
-
             // Immediately spawn a new ball
             spawnNewBall();
 
             // Initialize timer
-            totalTime = levelTime; // Assuming getTimeLeft returns time in seconds
+            totalTime = levelTime;
             remainingTime = totalTime;
             timerFinished = false;
             startTime = System.currentTimeMillis();
 
-            // Reset game state for the new level
             levelEnded = false;
             isGameEnded = false;
-
             playerLines.clear();
         }
     }
@@ -133,7 +125,6 @@ public class App extends PApplet {
             loadLevel(currentLevelIndex);
         } else {
             isGameEnded = true;
-            println("Congratulations! You've completed all levels.");
         }
     }
 
@@ -177,8 +168,7 @@ public class App extends PApplet {
     public void restartLevel() {
         loadLevel(currentLevelIndex);
         playerLines.clear();
-        score = 0; // Reset level score (optional)
-        println("Restarted current level: " + currentLevelIndex);
+        score = 0;
     }
 
     /**
@@ -190,7 +180,6 @@ public class App extends PApplet {
         loadLevel(currentLevelIndex);
         playerLines.clear();
         score = 0;
-        println("Game restarted.");
     }
 
     /**
@@ -217,7 +206,6 @@ public class App extends PApplet {
      * @param key the key character that was pressed
      */
     public void handleKeyPress(char key) {
-        // If the game is ended, handle restart event
         if (isGameEnded) {
             if (key == 'r' || key == 'R') {
                 restartGame();
@@ -225,7 +213,6 @@ public class App extends PApplet {
             return;
         }
 
-        // If the level is ended or time is up, allow restarting the level
         if (levelEnded || timerFinished) {
             if (key == 'r' || key == 'R') {
                 restartLevel();
@@ -233,7 +220,6 @@ public class App extends PApplet {
             return;
         }
 
-        // Handle events when the game is active
         if (key == 'r' || key == 'R') {
             restartLevel();
         }
@@ -325,8 +311,6 @@ public class App extends PApplet {
         fill(0);
         textSize(20);
         textAlign(LEFT, CENTER);
-
-        // Display the score
         text("Score: " + score, 450, TOPBAR - 45);
         text("Time: " + remainingTime, 450, TOPBAR - 15);
 
@@ -340,7 +324,7 @@ public class App extends PApplet {
 
         // Display bottom black frame
         fill(0);
-        rect(0, 12, 160, 36); // Draw black rectangle at the bottom
+        rect(0, 12, 160, 36);
     }
 
     /**
@@ -408,7 +392,6 @@ public class App extends PApplet {
                 text("***PAUSED***", WIDTH / 2 + 50, TOPBAR / 2);
             }
 
-            // Draw the current level
             currentLevel.draw(this);
         }
 
@@ -439,7 +422,7 @@ public class App extends PApplet {
         updateTimer();
 
         // Update balls and check collisions
-        currentLevel.update(this);  // Update balls, check collisions
+        currentLevel.update(this);
 
         // Check for ball collisions with player-drawn lines
         for (Ball ball : currentLevel.getBalls()) {
@@ -483,19 +466,16 @@ public class App extends PApplet {
 
         // Handle level end due to time up
         if (timerFinished && !(currentLevel.getBalls().isEmpty() && unspawnedBalls.isEmpty())) {
-            currentLevel.endLevel(this, "timeUp"); // End the level only once
-            levelEnded = true;  // Mark the level as ended to prevent multiple calls
-            isGameEnded = true; // Stop further game updates
+            currentLevel.endLevel(this, "timeUp");
+            levelEnded = true;
+            isGameEnded = true;
         }
     }
 
     /**
      * Final rendering tasks after game updates.
      */
-    void postRender() {
-        // Currently, all rendering is handled in render()
-        // Additional post-rendering tasks can be added here if necessary
-    }
+    void postRender() {}
 
     /**
      * Update the timer based on the elapsed time.
@@ -515,20 +495,10 @@ public class App extends PApplet {
         }
     }
 
-    /**
-     * Gets the remaining time for the current level.
-     *
-     * @return The remaining time in seconds.
-     */
     public int getRemainingTime() {
         return remainingTime;
     }
 
-    /**
-     * Sets the remaining time for the level.
-     *
-     * @param time The new remaining time in seconds.
-     */
     public void setRemainingTime(int time) {
         this.remainingTime = time;
     }
@@ -578,7 +548,7 @@ public class App extends PApplet {
         ball.setXVelocity(ball.getRandomVelocity());
         ball.setYVelocity(ball.getRandomVelocity());
         ball.resetRadius();
-        currentLevel.addBall(ball);  // Re-add the ball to the current level
+        currentLevel.addBall(ball);
     }
 
     /**

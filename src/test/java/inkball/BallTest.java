@@ -17,7 +17,7 @@ public class BallTest {
         PApplet.runSketch(new String[]{"App"}, app);
 
         // Initialize a ball with starting position (50, 50), color 1, and radius 10
-        ball = new Ball(50, 50, 1, 10, app);
+        ball = new Ball(50, 50, 1, 12, app);
     }
 
     @Test
@@ -25,7 +25,7 @@ public class BallTest {
         // Ensure the ball is initialized with correct values
         assertEquals(50, ball.getX());
         assertEquals(50, ball.getY());
-        assertEquals(10, ball.getRadius());
+        assertEquals(12, ball.getRadius());
         assertEquals(1, ball.getColor());
         assertFalse(ball.getIsActive()); // Ball should be inactive at initialization
 
@@ -65,7 +65,7 @@ public class BallTest {
 
         // Reset to the initial radius
         ball.resetRadius();
-        assertEquals(10, ball.getRadius()); // Initial radius was 10
+        assertEquals(12, ball.getRadius()); // Initial radius was 12
     }
 
     @Test
@@ -85,7 +85,7 @@ public class BallTest {
     @Test
     public void testActiveState() {
         // Ensure the ball's active state can be modified
-        assertFalse(ball.getIsActive());  // Initial state should be inactive
+        assertFalse(ball.getIsActive());
 
         // Set the ball as active
         ball.setIsActive(true);

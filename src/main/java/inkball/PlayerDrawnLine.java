@@ -8,19 +8,22 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * The PlayerDrawnLine class represents a line drawn by the player in the Inkball game.
- * It manages the points that define the line, handles drawing the line on the game screen,
+ * Represents a line drawn by the player in the Inkball game.
+ * Manages the points that define the line, handles drawing the line on the game screen,
  * and checks for collisions with balls.
  */
 public class PlayerDrawnLine {
-    List<PVector> points;  // Stores the points that make up the line
-    static final float LINE_THICKNESS = 10;  // Thickness of the drawn line
-    public static final int DELETE_THRESHOLD = 15;  // Threshold for detecting proximity to remove the line
-    private int collisionBuffer;  // Buffer to avoid continuous collision detection
-    public static final int BUFFER_THRESHOLD = 5;  // Number of frames to wait before checking collisions again
+    /** Stores the points that make up the line */
+    List<PVector> points;
+    static final float LINE_THICKNESS = 10;
+    public static final int DELETE_THRESHOLD = 15;
+    /** Buffer to avoid continuous collision detection */
+    private int collisionBuffer;
+    /** Number of frames to wait before checking collisions again */
+    public static final int BUFFER_THRESHOLD = 5;
 
     /**
-     * Constructor to initialize a PlayerDrawnLine object.
+     * Constructs a PlayerDrawnLine object.
      */
     public PlayerDrawnLine() {
         points = new ArrayList<>();
@@ -49,7 +52,7 @@ public class PlayerDrawnLine {
      * @param p The App instance used to draw the line.
      */
     public void draw(App p) {
-        p.pushStyle(); // 保存当前绘图状态
+        p.pushStyle(); // Save current drawing style
 
         if (points.size() > 1) {
             p.stroke(0);  // Set the line color to black
@@ -61,7 +64,7 @@ public class PlayerDrawnLine {
             }
         }
 
-        p.popStyle(); // 恢复绘图状态
+        p.popStyle(); // Restore drawing style
     }
 
     /**

@@ -5,11 +5,12 @@ import processing.core.PImage;
 
 /**
  * The YellowTile class represents a yellow tile that moves around the perimeter of the game board.
+ * It handles the movement logic to ensure the tile moves clockwise and manages its visual representation.
  */
 public class YellowTile extends Entity implements Drawable {
-    private int x, y;               // Current position of the yellow tile
-    private PImage yellowTileImage; // Image for the yellow tile
-    private int direction;          // Direction of movement: 0=right, 1=down, 2=left, 3=up
+    private PImage yellowTileImage;
+    /** The direction of movement: 0=right, 1=down, 2=left, 3=up */
+    private int direction;
 
     /**
      * Constructs a YellowTile object with a starting position and image.
@@ -33,12 +34,17 @@ public class YellowTile extends Entity implements Drawable {
      * @param p The App instance used to load the image.
      */
     public void loadImage(App p) {
-        yellowTileImage = p.loadImage("inkball/wall4.png");  // Load the image based on the wall's color
+        yellowTileImage = p.loadImage("inkball/wall4.png");
     }
 
+    /**
+     * Draws the yellow tile on the game screen.
+     *
+     * @param p The App instance used for rendering.
+     */
     @Override
     public void draw(App p) {
-        p.image(yellowTileImage, x, y, App.CELLSIZE, App.CELLSIZE);  // Draw the tile with size
+        p.image(yellowTileImage, x, y, App.CELLSIZE, App.CELLSIZE);
     }
 
     /**
@@ -47,9 +53,6 @@ public class YellowTile extends Entity implements Drawable {
      * @param p The PApplet instance used for accessing global properties.
      */
     public void update(App p) {
-        // Implement clockwise movement
-        // Assume the perimeter is from (0, TOPBAR) to (WIDTH - CELLSIZE, HEIGHT - CELLSIZE)
-        // Directions: 0=right, 1=down, 2=left, 3=up
 
         switch (direction) {
             case 0: // Moving right
@@ -84,43 +87,33 @@ public class YellowTile extends Entity implements Drawable {
     }
 
     // Getters and Setters
-
     public int getX() {
         return x;
     }
-
     public void setX(int x) {
         this.x = x;
     }
-
     public int getY() {
         return y;
     }
-
     public void setY(int y) {
         this.y = y;
     }
-
     public int getDirection() {
         return direction;
     }
-
     public void setDirection(int direction) {
         this.direction = direction;
     }
-
     public PImage getYellowTileImage() {
         return yellowTileImage;
     }
-
     public void setYellowTileImage(PImage yellowTileImage) {
         this.yellowTileImage = yellowTileImage;
     }
-
     public int getColor() {
         return color;
     }
-
     public void setColor(int color) {
         this.color = color;
     }

@@ -13,29 +13,32 @@ import processing.core.PImage;
  * managing game logic such as score and timing.
  */
 public class Level {
-    int[] scoreIncreaseArray = new int[5]; // Score increase values for each ball color
-    int[] scoreDecreaseArray = new int[5]; // Score decrease values for each ball color
+    /** Score increase values for each ball color */
+    int[] scoreIncreaseArray = new int[5];
+    int[] scoreDecreaseArray = new int[5];
     private List<Ball> balls;
     private List<Wall> walls;
     private List<Spawner> spawners;
     private List<Hole> holes;
-    List<AccelerateTile> accelerationTiles;  // List of all acceleration tiles
+    List<AccelerateTile> accelerationTiles;
     private ConfigReader configReader;
 
-    boolean isLevelEnded = false;  // Whether the level has ended
-    int timeBonusRemaining = 0;        // Remaining time for bonus phase in seconds
-    private PImage defaultTileImage;        // Image for default tiles
-    YellowTile yellowTileTopLeft;    // Top-left yellow tile
-    YellowTile yellowTileBottomRight; // Bottom-right yellow tile
+    boolean isLevelEnded = false;
+    int timeBonusRemaining = 0;
+    private PImage defaultTileImage;
+    YellowTile yellowTileTopLeft;
+    YellowTile yellowTileBottomRight;
 
     /**
      * Constructs a Level object and initializes the entity lists and score modification arrays.
      *
-     * @param p               The App instance used to load images.
+     * @param levelIndex   The index of the level.
+     * @param configReader The ConfigReader instance for accessing configuration settings.
+     * @param p            The App instance used to load images.
      */
     public Level(int levelIndex, ConfigReader configReader, App p) {
 
-        balls = new CopyOnWriteArrayList<>();
+        balls = new ArrayList<>();
         walls = new ArrayList<>();
         spawners = new ArrayList<>();
         holes = new ArrayList<>();
@@ -69,7 +72,6 @@ public class Level {
     public void increaseScore(int colorIndex, App app) {
         if (colorIndex >= 0 && colorIndex < scoreIncreaseArray.length) {
             int amount = scoreIncreaseArray[colorIndex];
-//            System.out.println("Increasing score by: " + amount);
             app.increaseScore(amount);
         }
     }
@@ -83,46 +85,44 @@ public class Level {
     public void decreaseScore(int colorIndex, App app) {
         if (colorIndex >= 0 && colorIndex < scoreDecreaseArray.length) {
             int amount = scoreDecreaseArray[colorIndex];
-//            System.out.println("Decreasing score by: " + amount);
             app.decreaseScore(amount);
         }
     }
 
     public boolean getIsLevelEnded() { return isLevelEnded; }
-
-    // Retrieves the list of active balls in the current level
     public List<Ball> getBalls() {
         return balls;
     }
-
-    // Retrieves the list of walls in the current level
     public List<Wall> getWalls() {
         return walls;
     }
-
-    // Retrieves the list of spawners in the current level
     public List<Spawner> getSpawners() {
         return spawners;
     }
-
-    // Retrieves the list of holes in the current level
     public List<Hole> getHoles() {
         return holes;
     }
 
-    // Adds a new ball to the list of active balls in the current level
+    /**
+     * Adds a new ball to the list of active balls in the current level.
+     *
+     * @param ball The ball to be added.
+     */
     public void addBall(Ball ball) {
         balls.add(ball);
     }
 
-    // Removes a ball from the list of active balls in the current level
+    /**
+     * Removes a ball from the list of active balls in the current level.
+     *
+     * @param ball The ball to be removed.
+     */
     public void removeBall(Ball ball) {
         balls.remove(ball);
     }
 
     /**
      * Loads a level layout from a text file and creates corresponding game entities.
-     * 此方法现在不再管理瓷砖，而是在绘制时自动为所有位置（除顶部栏外）添加默认瓷砖。
      *
      * @param layoutFile The path to the layout text file.
      * @param p          The App object used to load the file and create entities.
@@ -155,43 +155,38 @@ public class Level {
                         walls.add(new Wall(col * App.CELLSIZE, row * App.CELLSIZE + App.TOPBAR, 4, p));
                         break;
                     case 'S':  // Spawner
-                        if (col + 2 < line.length()) {
-                            int spawnInterval = Character.getNumericValue(line.charAt(col + 1)) * 1000;
-                            int ballColor = Character.getNumericValue(line.charAt(col + 2));
-                            spawners.add(new Spawner(col * App.CELLSIZE, row * App.CELLSIZE + App.TOPBAR, -1, p));
-                        }
+                        spawners.add(new Spawner(col * App.CELLSIZE, row * App.CELLSIZE + App.TOPBAR, -1, p));
                         break;
                     case 'H':  // Hole
                         if (col + 1 < line.length()) {
                             int holeColor = Character.getNumericValue(line.charAt(col + 1));
                             if (holeColor >= 0 && holeColor <= 4) {
                                 holes.add(new Hole(col * App.CELLSIZE, row * App.CELLSIZE + App.TOPBAR, holeColor, p));
-                                col++;  // Move to next character (color)
+                                col++;  // Move to next character
                             }
                         }
                         break;
-                    case 'B':  // Ball added to the spawner
+                    case 'B':  // Ball
                         if (col + 1 < line.length()) {
                             int ballColor = Character.getNumericValue(line.charAt(col + 1));
                             Ball ball = new Ball(col * App.CELLSIZE, row * App.CELLSIZE + App.TOPBAR, ballColor, 12, p);
                             ball.setIsActive(true);
                             balls.add(ball);
-                            col++;  // Skip over the color character
+                            col++;
                         }
                         break;
                     case 'A':  // AccelerateTile
                         if (col + 1 < line.length()) {
                             int direction = Character.getNumericValue(line.charAt(col + 1));
-                            String accelDirection;
+                            String accelDirection = "up";
                             switch (direction) {
                                 case 0: accelDirection = "up"; break;
                                 case 1: accelDirection = "down"; break;
                                 case 2: accelDirection = "left"; break;
                                 case 3: accelDirection = "right"; break;
-                                default: throw new IllegalArgumentException("Invalid acceleration direction");
                             }
                             accelerationTiles.add(new AccelerateTile(col * App.CELLSIZE, row * App.CELLSIZE + App.TOPBAR, accelDirection, p));
-                            col++;  // Move to next character (direction)
+                            col++;
                         }
                         break;
                 }
@@ -208,7 +203,7 @@ public class Level {
         // Iterate through the list of active balls
         for (int i = 0; i < balls.size(); i++) {
             Ball ball = balls.get(i);
-            ball.updatePosition();  // Update ball's position
+            ball.updatePosition();
 
             // Check for collisions between the ball and walls
             for (Wall wall : walls) {
@@ -221,7 +216,7 @@ public class Level {
 
                 // If the ball is no longer active (captured or deactivated)
                 if (!ball.getIsActive()) {
-                    balls.remove(i);  // Remove the ball from the list
+                    balls.remove(i);
                     break; // No need to check further holes for this ball
                 }
             }
@@ -241,27 +236,24 @@ public class Level {
     /**
      * Ends the current level and starts the time bonus phase if applicable.
      *
-     * @param p The main game application instance.
+     * @param p      The main game application instance.
+     * @param reason The reason for ending the level ("normal" or "timeUp").
      */
     public void endLevel(App p, String reason) {
         if (isLevelEnded) {
-            return; // 如果关卡已经结束，直接返回，防止重复调用
+            return; // Avoid duplicated call
         }
         isLevelEnded = true;
 
         switch (reason) {
             case "normal":
-                // Handle normal level ending
                 if (p.getRemainingTime() > 0) {
                     timeBonusRemaining = p.getRemainingTime(); // Use remaining time for bonus
                 }
                 break;
             case "timeUp":
-                // Handle level ending due to time up
                 timeBonusRemaining = 0; // No bonus if time is up
                 break;
-            default:
-                throw new IllegalArgumentException("Unknown reason for ending level: " + reason);
         }
 
         // Initialize positions for yellow tiles animation at the end of the level
@@ -271,46 +263,39 @@ public class Level {
 
     /**
      * Draws all entities in the current level, including walls, spawners, holes, and balls.
-     * 现在在绘制时自动为所有位置（除顶部栏外）添加默认瓷砖。
      *
-     * @param p        The main game application instance used to draw entities.
+     * @param p The main game application instance used to draw entities.
      */
     public void draw(App p) {
-        // 首先绘制默认瓷砖
         drawDefaultTiles(p);
 
-        // 绘制所有墙壁
         for (Wall wall : walls) {
             wall.draw(p);
         }
 
-        // 绘制所有洞
         for (Hole hole : holes) {
             hole.draw(p);
         }
 
-        // 绘制所有生成器
         for (Spawner spawner : spawners) {
             spawner.draw(p);
         }
 
-        // 绘制所有加速板
         for (AccelerateTile tile : accelerationTiles) {
             tile.draw(p);
         }
 
-        // 绘制所有活跃的球
         for (Ball ball : balls) {
             ball.draw(p);
         }
 
-        // 如果关卡已经结束且游戏未暂停且时间未耗尽，处理剩余时间和黄色瓷砖动画
+        // Handle the remaining time and yellow tile animation
         if (isLevelEnded && !p.getIsPaused() && !p.isTimerFinished()) {
             updateTimeBonus(p);
             moveYellowTiles(p);
         }
 
-        // 绘制黄色瓷砖动画
+        // Draw yellow tile
         if (isLevelEnded && !p.getIsPaused() && !p.isTimerFinished()) {
             if (yellowTileTopLeft != null) {
                 yellowTileTopLeft.draw(p);
@@ -322,12 +307,11 @@ public class Level {
     }
 
     /**
-     * 在关卡绘制时，为所有位置（除顶部栏外）绘制默认的瓷砖。
+     * Draws the default tiles for all positions (except the top bar).
      *
      * @param p The main game application instance used for drawing.
      */
     void drawDefaultTiles(App p) {
-        // 避免每帧重复加载图片，使用已经加载的 defaultTileImage
         for (int row = 0; row < (App.HEIGHT - App.TOPBAR) / App.CELLSIZE; row++) {
             for (int col = 0; col < App.BOARD_WIDTH; col++) {
                 int x = col * App.CELLSIZE;
@@ -345,7 +329,7 @@ public class Level {
     void updateTimeBonus(App p) {
         if (timeBonusRemaining > 0) {
             long currentTime = p.millis();
-            if (p.frameCount % 2 == 0) { // Roughly every 2 frames (~0.067 seconds at 30 FPS)
+            if (p.frameCount % 2 == 0) { // Every 2 frames (~0.067 seconds at 30 FPS)
                 p.increaseScore(1);
                 timeBonusRemaining -= 1;
                 p.setRemainingTime(timeBonusRemaining);
@@ -354,12 +338,10 @@ public class Level {
                 if (timeBonusRemaining < 0) {
                     timeBonusRemaining = 0;
                 }
-//                System.out.println("时间奖励: 分数增加 1 分，剩余时间奖励分数: " + timeBonusRemaining + " 分");
             }
         } else {
             isLevelEnded = false;
-//            System.out.println("时间奖励完成，进入下一个关卡。");
-            p.nextLevel(); // Proceed to the next level after time bonus is complete
+            p.nextLevel();
         }
     }
 
@@ -369,7 +351,7 @@ public class Level {
      * @param p The main game application instance used for animation.
      */
     void moveYellowTiles(App p) {
-        if (p.frameCount % 2 == 0) { // Roughly every 2 frames (~0.067 seconds at 30 FPS)
+        if (p.frameCount % 2 == 0) { // Every 2 frames (~0.067 seconds at 30 FPS)
             // Move the top-left yellow tile clockwise
             if (yellowTileTopLeft != null) {
                 yellowTileTopLeft.update(p);

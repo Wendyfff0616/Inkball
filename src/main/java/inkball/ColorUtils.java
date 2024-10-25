@@ -14,7 +14,6 @@ public class ColorUtils {
     // Maps numeric values to their corresponding color names
     static Map<Integer, String> colorNumberToName = new HashMap<>();
 
-    // Static block to initialize the mappings
     static {
         colorNameToNumber.put("grey", 0);
         colorNameToNumber.put("blue", 1);
@@ -31,7 +30,7 @@ public class ColorUtils {
     /**
      * Converts a color name to its corresponding numeric value.
      *
-     * @param colorName The name of the color (e.g., "grey", "blue").
+     * @param colorName The name of the color.
      * @return The corresponding numeric value for the color, or -1 if the color is not found.
      */
     public static int colorToNumber(String colorName) {

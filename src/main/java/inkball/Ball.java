@@ -12,7 +12,7 @@ public class Ball extends Entity implements Movable, Drawable {
 
     private PImage ballImage;
     private float radius;
-    private float initialRadius;  // Stores the initial radius of the ball
+    private float initialRadius;
     private float vx, vy;  // Velocity in x and y directions
     private float initialVx;
     private float initialVy;
@@ -21,7 +21,7 @@ public class Ball extends Entity implements Movable, Drawable {
     private static Random random = new Random();
 
     /**
-     * Constructor for Ball object.
+     * Constructs a Ball object with specified position, color, radius, and reference to the game app.
      *
      * @param x      Initial x-coordinate of the ball.
      * @param y      Initial y-coordinate of the ball.
@@ -43,7 +43,7 @@ public class Ball extends Entity implements Movable, Drawable {
 
         this.isActive = false;
 
-        loadImage(p);  // Load the corresponding image for the ball color
+        loadImage(p);
     }
 
     // Getter and setter methods
@@ -65,13 +65,20 @@ public class Ball extends Entity implements Movable, Drawable {
     public void setY(int y) { this.y = y; }
     public void setXVelocity(float vx) { this.vx = vx; }
     public void setYVelocity(float vy) { this.vy = vy; }
+    public void setInitialVx(float initialVx) {
+        this.initialVx = initialVx;
+    }
+    public void setInitialVy(float initialVy) {
+        this.initialVy = initialVy;
+    }
+
     public void setRadius(float radius) { this.radius = radius; }
 
     /**
      * Resets the ball's radius to its initial value.
      */
     public void resetRadius() {
-        this.radius = this.initialRadius;  // Reset the ball size
+        this.radius = this.initialRadius;
     }
 
     /**
@@ -114,8 +121,6 @@ public class Ball extends Entity implements Movable, Drawable {
         x += vx;
         y += vy;
     }
-
-
 
     /**
      * Draws the ball on the game screen.

@@ -1,0 +1,86 @@
+# ===============================
+# Gradle Build Files
+# ===============================
+.gradle/
+build/
+
+# Do not ignore Gradle Wrapper files
+!gradle/wrapper/gradle-wrapper.jar
+
+# ===============================
+# IDE Specific Files
+# ===============================
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# NetBeans
+nbproject/private/
+build/
+nbbuild/
+dist/
+.nb-gradle/
+
+# ===============================
+# Operating System Files
+# ===============================
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# ===============================
+# Log Files
+# ===============================
+*.log
+
+# ===============================
+# Compiled Java Classes
+# ===============================
+*.class
+
+# ===============================
+# Package Files
+# ===============================
+*.jar
+*.war
+*.ear
+
+# ===============================
+# Temporary Files
+# ===============================
+*.tmp
+*.temp
+*.bak
+
+# ===============================
+# Environment Configuration Files
+# ===============================
+.env
+!.env.example
+
+# ===============================
+# GitHub Actions
+# ===============================
+.github/workflows/
+
+# ===============================
+# Other Ignored Files
+# ===============================
+# Ignore all .env files except .env.example
+.env
+!.env.example

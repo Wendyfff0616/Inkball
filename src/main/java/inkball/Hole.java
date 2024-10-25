@@ -6,28 +6,38 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Represents a Hole object in the Inkball game.
+ * Represents a Hole object in the Inkball game. Holes attract balls within a certain range
+ * and handle the logic for capturing or rejecting balls based on their color.
  */
 public class Hole extends Entity implements Drawable {
     private PImage holeImage;
-    private int width, height;  // Size of the hole (64x64 pixels)
-    private static final float ATTRACTION_FACTOR = 0.005f;  // Attraction force as 0.5% (0.005)
+    private int width, height;
 
-    // Used to track the currently attracted balls
+    /** The attraction force factor applied to nearby balls. */
+    private static final float ATTRACTION_FACTOR = 0.005f;
+
+    /** Set to track balls currently being attracted to the hole. */
     private Set<Ball> attractedBalls = new HashSet<>();
 
     /**
-     * Constructor for the Hole object.
+     * Constructs a Hole object with specified position, color, and reference to the game app.
+     *
+     * @param x      The initial x-coordinate of the hole.
+     * @param y      The initial y-coordinate of the hole.
+     * @param color  The color of the hole, represented as an integer.
+     * @param p      Reference to the main game object for loading images.
      */
     public Hole(int x, int y, int color, App p) {
         super(x, y, color);
-        this.width = 64;  // Each hole is 64x64 pixels (2x2 tiles)
+        this.width = 64;
         this.height = 64;
         loadImage(p);
     }
 
     /**
      * Loads the image of the hole based on its color.
+     *
+     * @param p Reference to the main game object for loading the image.
      */
     @Override
     public void loadImage(App p) {
@@ -36,6 +46,8 @@ public class Hole extends Entity implements Drawable {
 
     /**
      * Draws the hole on the game screen.
+     *
+     * @param p Reference to the main game object used for rendering.
      */
     @Override
     public void draw(App p) {
@@ -44,6 +56,10 @@ public class Hole extends Entity implements Drawable {
 
     /**
      * Attracts the ball toward the hole if the ball is within a certain range.
+     *
+     * @param ball  The ball to attract.
+     * @param level The current level instance.
+     * @param app   Reference to the main game application.
      */
     public void attractBall(Ball ball, Level level, App app) {
         float holeCenterX = x + width / 2.0f;
@@ -71,29 +87,30 @@ public class Hole extends Entity implements Drawable {
             ball.setXVelocity(ball.getXVelocity() + attraction.x);
             ball.setYVelocity(ball.getYVelocity() + attraction.y);
 
-            // Gradually decrease the ball's size to simulate it falling into the hole
-            float newRadius = ball.getInitialRadius() * (distanceToHole / 32.0f);  // Scale radius based on distance
+            // Decrease the ball's size proportionally
+            float newRadius = ball.getInitialRadius() * (distanceToHole / 32.0f);
             newRadius = Math.max(newRadius, 0);  // Prevent negative radius
             ball.setRadius(newRadius);
 
             // Check if the ball has been successfully captured by the hole
             if (distanceToHole < 15) {  // Ball is close enough to be captured
                 if (ball.getColor() == this.color || ball.getColor() == ColorUtils.colorToNumber("grey") || this.color == ColorUtils.colorToNumber("grey")) {
+
                     // Successful capture, remove the ball
-//                    System.out.println("---------Capture Successful");
-                    level.increaseScore(ball.getColor(), app);  // Pass the color number to increase score
+                    level.increaseScore(ball.getColor(), app);
                     ball.setIsActive(false);  // Deactivate the ball to prevent further updates
+
                 } else {
+
                     // Capture failed, move the ball back to the unspawned queue
-//                    System.out.println("---------Capture Failed");
-                    level.decreaseScore(ball.getColor(), app);  // Pass the color number to decrease score
-                    ball.setIsActive(false);  // Deactivate the ball
+                    level.decreaseScore(ball.getColor(), app);
+                    ball.setIsActive(false);
 
                     // Check if the unspawned queue is empty, and if so, immediately spawn a new ball
                     if (app.unspawnedBalls.isEmpty()) {
-                        app.spawnNewBallImmediate(ball);  // Immediately spawn the new ball if queue is empty
+                        app.spawnNewBallImmediate(ball);
                     } else {
-                        app.addUnspawnedBall(ball);  // Add the ball back to the unspawned queue
+                        app.addUnspawnedBall(ball);
                     }
                 }
                 // Remove the ball from attractedBalls as it's no longer active
@@ -131,64 +148,43 @@ public class Hole extends Entity implements Drawable {
     }
 
     // Getters and Setters
-
     public int getX() {
         return x;
     }
-
     public void setX(int x) {
         this.x = x;
     }
-
     public int getY() {
         return y;
     }
-
     public void setY(int y) {
         this.y = y;
     }
-
     public int getColor() {
         return color;
     }
-
     public void setColor(int color) {
         this.color = color;
     }
-
     public int getWidth() {
         return width;
     }
-
     public void setWidth(int width) {
         this.width = width;
     }
-
     public int getHeight() {
         return height;
     }
-
     public void setHeight(int height) {
         this.height = height;
     }
-
     public PImage getHoleImage() {
         return holeImage;
     }
-
     public void setHoleImage(PImage holeImage) {
         this.holeImage = holeImage;
     }
-
     public Set<Ball> getAttractedBalls() {
         return attractedBalls;
-    }
-
-    public void setAttractedBalls(Set<Ball> attractedBalls) {
-        this.attractedBalls = attractedBalls;
-    }
-
-    public float getAttractionFactor() {
-        return ATTRACTION_FACTOR;
     }
 }

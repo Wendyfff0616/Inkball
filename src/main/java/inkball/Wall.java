@@ -9,11 +9,13 @@ import processing.core.PVector;
  * a collision buffer to control collision detection frequency.
  */
 public class Wall extends Entity implements Drawable {
-    PImage wallImage;  // The image representing the wall
+    PImage wallImage;
     int width;
-    int height;  // Dimensions of the wall (32x32 pixels)
-    int collisionBuffer;  // Buffer to reduce frequent collision detection
-    public static final int BUFFER_THRESHOLD = 5;  // Minimum frames between collision checks
+    int height;
+    /** Buffer to reduce frequent collision detection */
+    int collisionBuffer;
+    /** Minimum frames between collision checks */
+    public static final int BUFFER_THRESHOLD = 5;
 
     /**
      * Constructs a Wall object.
@@ -25,14 +27,20 @@ public class Wall extends Entity implements Drawable {
      */
     public Wall(int x, int y, int color, App p) {
         super(x, y, color);
-        this.width = 32;  // Default width
-        this.height = 32; // Default height
+        this.width = 32;
+        this.height = 32;
         this.collisionBuffer = 0;
-        loadImage(p);  // Load the wall image
+        loadImage(p);
     }
 
     public int getX() { return this.x; }
     public int getY() { return this.y; }
+    public void setX(int x) {
+        this.x = x;
+    }
+    public void setY(int y) {
+        this.y = y;
+    }
 
     /**
      * Loads the image for the wall based on its color.
@@ -56,6 +64,7 @@ public class Wall extends Entity implements Drawable {
 
         // Check for collision only if the buffer threshold is reached
         if (collisionBuffer >= BUFFER_THRESHOLD) {
+
             // Check if the ball's bounding box intersects with the wall
             if (ball.getX() + ball.getRadius() > x && ball.getX() - ball.getRadius() < x + width &&
                     ball.getY() + ball.getRadius() > y && ball.getY() - ball.getRadius() < y + height) {
@@ -74,6 +83,7 @@ public class Wall extends Entity implements Drawable {
 
                 // Determine the side of the wall the ball collided with (horizontal or vertical)
                 if (minOverlapX < minOverlapY) {
+
                     // Horizontal collision
                     if (overlapLeft < overlapRight) {
                         normal = new PVector(-1, 0);  // Left side
@@ -82,7 +92,9 @@ public class Wall extends Entity implements Drawable {
                         normal = new PVector(1, 0);  // Right side
                         ball.setX((int) (ball.getX() + overlapRight));  // Adjust the ball's position
                     }
+
                 } else {
+
                     // Vertical collision
                     if (overlapTop < overlapBottom) {
                         normal = new PVector(0, -1);  // Top side
@@ -119,7 +131,7 @@ public class Wall extends Entity implements Drawable {
      */
     @Override
     public void draw(App p) {
-        p.image(wallImage, x, y, width, height);  // Draw the wall image at the specified position
+        p.image(wallImage, x, y, width, height);
     }
 
     public int getColor() {

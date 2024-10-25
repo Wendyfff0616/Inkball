@@ -6,7 +6,6 @@
       "spawn_interval": 10,
       "score_increase_from_hole_capture_modifier": 1.0,
       "score_decrease_from_wrong_hole_modifier": 1.0,
-      "_comment": ["blue", "orange", "grey", "blue", "green", "yellow"],
       "balls": ["blue", "orange", "grey", "blue", "green", "yellow"]
     },
     {

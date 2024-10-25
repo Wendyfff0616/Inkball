@@ -1,7 +1,5 @@
 package inkball;
 
-import processing.core.PImage;
-
 /**
  * The Entity class serves as an abstract base class for all objects in the Inkball game
  * that have a position (x, y) and a color. This class provides a foundation for
@@ -9,12 +7,12 @@ import processing.core.PImage;
  * the abstract method to load images.
  */
 public abstract class Entity {
-    protected int x;      // The x-coordinate of the entity
-    protected int y;      // The y-coordinate of the entity
-    protected int color;  // The color of the entity
+    protected int x;
+    protected int y;
+    protected int color;
 
     /**
-     * Constructor to initialize the position and color of the entity.
+     * Constructs an Entity with specified position and color.
      *
      * @param x     The initial x-coordinate of the entity.
      * @param y     The initial y-coordinate of the entity.

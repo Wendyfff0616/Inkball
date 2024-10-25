@@ -21,7 +21,13 @@ public class ConfigReader {
         this.config = p.loadJSONObject(configPath); // Loads the JSON config file
     }
 
-    // Additional constructor for testing
+    /**
+     * Constructs a ConfigReader object with a predefined JSONObject.
+     * This constructor is primarily used for testing purposes.
+     *
+     * @param config The JSONObject representing the configuration.
+     * @param app    The App object associated with the configuration.
+     */
     public ConfigReader(JSONObject config, App app) {
         this.app = app;
         this.config = config;
@@ -69,10 +75,7 @@ public class ConfigReader {
      */
     public JSONArray getBallColors(int levelIndex) {
         JSONObject levelConfig = getLevelConfig(levelIndex);
-        if (levelConfig != null) {
-            return levelConfig.getJSONArray("balls");
-        }
-        return null;
+        return levelConfig.getJSONArray("balls");
     }
 
     /**
@@ -83,10 +86,7 @@ public class ConfigReader {
      */
     public double getScoreIncreaseModifier(int levelIndex) {
         JSONObject levelConfig = getLevelConfig(levelIndex);
-        if (levelConfig != null) {
-            return levelConfig.getDouble("score_increase_from_hole_capture_modifier", 1.0); // Default to 1.0 if not found
-        }
-        return 1.0;
+        return levelConfig.getDouble("score_increase_from_hole_capture_modifier", 1.0); // Default to 1.0 if not found
     }
 
     /**
@@ -97,39 +97,30 @@ public class ConfigReader {
      */
     public double getScoreDecreaseModifier(int levelIndex) {
         JSONObject levelConfig = getLevelConfig(levelIndex);
-        if (levelConfig != null) {
-            return levelConfig.getDouble("score_decrease_from_wrong_hole_modifier", 1.0); // Default to 1.0 if not found
-        }
-        return 1.0;
+        return levelConfig.getDouble("score_decrease_from_wrong_hole_modifier", 1.0); // Default to 1.0 if not found
     }
 
     /**
      * Retrieves the score increase value for successfully capturing a ball of a specific color.
      * This method retrieves the value from the global configuration, not from the level-specific configuration.
      *
-     * @param color      The color of the ball (e.g., "grey", "orange").
+     * @param color The color of the ball (e.g., "grey", "orange").
      * @return The score increase value for the given color.
      */
     public int getScoreIncrease(String color) {
         JSONObject scoreIncreaseConfig = config.getJSONObject("score_increase_from_hole_capture");
-        if (scoreIncreaseConfig != null && scoreIncreaseConfig.hasKey(color)) {
-            return scoreIncreaseConfig.getInt(color);
-        }
-        throw new RuntimeException("Score increase not found for color: " + color);
+        return scoreIncreaseConfig.getInt(color);
     }
 
     /**
      * Retrieves the score decrease value for incorrectly capturing a ball of a specific color.
      * This method retrieves the value from the global configuration, not from the level-specific configuration.
      *
-     * @param color      The color of the ball (e.g., "grey", "orange").
+     * @param color The color of the ball (e.g., "grey", "orange").
      * @return The score decrease value for the given color.
      */
     public int getScoreDecrease(String color) {
         JSONObject scoreDecreaseConfig = config.getJSONObject("score_decrease_from_wrong_hole");
-        if (scoreDecreaseConfig != null && scoreDecreaseConfig.hasKey(color)) {
-            return scoreDecreaseConfig.getInt(color);
-        }
-        throw new RuntimeException("Score decrease not found for color: " + color);
+        return scoreDecreaseConfig.getInt(color);
     }
 }
